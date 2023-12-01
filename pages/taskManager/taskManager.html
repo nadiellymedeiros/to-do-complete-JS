@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciador de tarefas</title>
+    <link rel="stylesheet" href="taskManager.css" />
+
+    <!-- Bootstrap ----------------------->
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <!-- jQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Popper.js and Bootstrap JS Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- end bootStrap ------------------->
+  </head>
+
+  <body>
+    <nav
+      class="d-flex justify-content-between w-100 ps-2 align-items-center text-light"
+    >
+      <p class="m-0" id="welcomeMessage"></p>
+      <button
+        type="button"
+        class="btn btn-light me-5"
+        onclick="realizarLogoff()"
+      >
+        Sair
+      </button>
+    </nav>
+
+    <div>
+      <div class="containerTaskManager m-auto">
+        <div class="m-5 d-flex justify-content-center">
+          <h1>Gerenciador de tarefas</h1>
+        </div>
+
+        <form class="row g-3">
+          <div class="col-12">
+            <label class="form-label">Tarefa</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputTask"
+              placeholder="Nome da tarefa"
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Data início</label>
+            <input type="date" class="form-control" id="inputStartDate" />
+          </div>
+
+          <div class="col-md-6">
+            <label for="inputStartTime" class="form-label"
+              >Hora de início</label
+            >
+            <input type="time" class="form-control" id="inputStartTime" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Data término</label>
+            <input type="date" class="form-control" id="inputEndDate" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Hora de término</label>
+            <input type="time" class="form-control" id="inputEndTime" />
+          </div>
+
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label"
+              >Descrição</label
+            >
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              rows="3"
+              placeholder="Escreva aqui a descrição de sua tarefa"
+            ></textarea>
+          </div>
+
+          <div class="listButoons">
+            <div class="col-12 d-flex justify-content-center" id="criarTarefa">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                onClick="adicionarTarefa()"
+              >
+                Criar tarefa
+              </button>
+            </div>
+
+            <!-- Quando clica no botão Alterar -->
+            <div
+              class="d-flex justify-content-center gap-2 d-none"
+              id="alterarDiv"
+            >
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="alterarTarefa()"
+              >
+                Alterar tarefa
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                onclick="excluirTarefa()"
+              >
+                Excluir tarefa
+              </button>
+              <button
+                type="button"
+                class="btn btn-success"
+                id="btn-Realizada"
+                onclick="toggleStatusRealizada()"
+              >
+                Marcar como realizada
+              </button>
+              <button
+                type="button"
+                class="btn btn-warning"
+                onclick="cancelarAlteracao()"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="tableContainer">
+        <div class="mt-5 mb-5 taskList mx-auto tableContent">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Tarefa</th>
+                <th scope="col">Início</th>
+                <th scope="col">Término</th>
+                <th scope="col">Status</th>
+                <th scope="col">Alterar</th>
+              </tr>
+            </thead>
+            <tbody id="taskListContainer"></tbody>
+          </table>
+
+          <div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Descrição -->
+    <div id="createModal">
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" id="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+              <!-- <h1 class="modal-title fs-5" id="exampleModalLabel"> Nome da Tarefa</h1> -->
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div class="modal-body" id="modalBody">
+              <!-- <p>Descrição</p> -->
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Modal Descrição -->
+
+    <script>
+      var selectedTaskIndex;
+      // Verificar se há um usuário logado no localStorage
+      var loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+      // Atualizar a mensagem de boas-vindas com o nome do usuário
+      if (loggedInUser && loggedInUser.nome) {
+        document.getElementById("welcomeMessage").textContent =
+          "Seja bem-vindo(a) " + loggedInUser.nome;
+      }
+
+      function adicionarTarefa() {
+        // Recuperar os valores do formulário
+        var nomeTarefa = document.getElementById("inputTask").value;
+        var startDate = document.getElementById("inputStartDate").value;
+        var startTime = document.getElementById("inputStartTime").value;
+        var endDate = document.getElementById("inputEndDate").value;
+        var endTime = document.getElementById("inputEndTime").value;
+        var descricao = document.getElementById(
+          "exampleFormControlTextarea1"
+        ).value;
+
+        // Criar objeto de tarefa
+        var newTask = {
+          id: Date.now(),
+          nomeTarefa: nomeTarefa,
+          startDate: startDate,
+          startTime: startTime,
+          endDate: endDate,
+          endTime: endTime,
+          descricao: descricao,
+        };
+
+        // Verificar se o usuário já tem tarefas no localStorage
+        loggedInUser.tarefas = loggedInUser.tarefas || [];
+
+        // Adicionar a nova tarefa ao array de tarefas do usuário
+        loggedInUser.tarefas.push(newTask);
+
+        // Atualizar o usuário no localStorage
+        localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+        // Limpar os campos do formulário
+        limparCampoFormulario();
+
+        // Recarregar a página (ou você pode adicionar a tarefa à lista sem recarregar)
+        location.reload();
+      }
+
+      function realizarLogoff() {
+        // Remove o usuário logado do localStorage
+        localStorage.removeItem("loggedInUser");
+
+        // Redireciona para a página de login (ou qualquer página apropriada)
+        window.location.replace("../../index.html");
+      }
+
+      function exibirTarefas() {
+        // Verificar se o usuário tem tarefas
+        if (loggedInUser && loggedInUser.tarefas) {
+          // Container da lista
+          var taskListContainer = document.getElementById("taskListContainer");
+
+          // Limpar conteúdo anterior
+          taskListContainer.innerHTML = "";
+
+          // Loop através das tarefas do usuário
+          loggedInUser.tarefas.forEach((tarefa, index) => {
+            // Criar elementos <li>
+            var listItem = document.createElement("tr");
+            listItem.className = "colorRow";
+
+            // Calcular status da tarefa
+            var status = calcularStatusTarefa(tarefa);
+
+            // Adicionar conteúdo ao <li>
+            listItem.innerHTML = `
+           
+          <td class="col "><button type="button" class="list-group-item " data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="showTaskDescriptionModal(${index})">
+            ${tarefa.nomeTarefa}
+          </button></td>
+          <td class="col">${tarefa.startDate} às ${tarefa.startTime}</td>
+          <td class="col">${tarefa.endDate} às ${tarefa.endTime}</td>
+          <td class="col">${status}</td>  
+          <td class="col btnAlterarCss"><button type="button" class="btn btn-primary " onClick="showAlterarDiv(${index})" >Alterar</button></td>
+         
+        `;
+
+            // Adicionar <li> ao container
+            taskListContainer.appendChild(listItem);
+          });
+        }
+      }
+
+      function calcularStatusTarefa(tarefa) {
+        var currentDateTime = getCurrentDateTime();
+
+        // Verificar se a tarefa foi marcada como realizada
+        if (tarefa.realizada) {
+          return "Realizada";
+        }
+
+        // Comparar com a data e hora atual
+        if (currentDateTime < tarefa.startDate + "T" + tarefa.startTime) {
+          return "Pendente";
+        } else if (
+          currentDateTime >= tarefa.startDate + "T" + tarefa.startTime &&
+          currentDateTime <= tarefa.endDate + "T" + tarefa.endTime
+        ) {
+          return "Em Andamento";
+        } else if (currentDateTime > tarefa.endDate + "T" + tarefa.endTime) {
+          return "Em Atraso";
+        }
+
+        return "";
+      }
+
+      function toggleStatusRealizada() {
+        if (selectedTaskIndex !== -1) {
+          var tarefa = loggedInUser.tarefas[selectedTaskIndex];
+          var btnRealizada = document.getElementById("btn-Realizada");
+
+          // Se a tarefa estiver realizada, mude para não realizada
+          if (tarefa.realizada) {
+            tarefa.realizada = false;
+            btnRealizada.textContent = "Marcar como Realizada";
+          } else {
+            // Se não estiver realizada, defina o status com base na data e hora
+            tarefa.realizada = true;
+            tarefa.status = calcularStatusTarefa(tarefa);
+            btnRealizada.textContent = "Marcar como Não Realizada";
+
+            document.getElementById("alterarDiv").classList.remove("d-none");
+            document.getElementById("criarTarefa").classList.add("d-none");
+          }
+
+          // Atualizar o usuário no localStorage
+          localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+          // Recarregar a lista de tarefas
+          exibirTarefas();
+        }
+      }
+
+      // ---------------------------------------------
+
+      exibirTarefas();
+
+      // ---------------------------------------------
+
+      // Função para abrir o modal com os detalhes da tarefa
+      function showTaskDescriptionModal(index) {
+        // Atualizar o cabeçalho do modal com o nome da tarefa
+        document.querySelector(
+          "#modal-header"
+        ).innerHTML = `<h1 class="modal-title fs-5" id="exampleModalLabel">${loggedInUser.tarefas[index].nomeTarefa}</h1>`;
+
+        // Atualizar o corpo do modal com a descrição da tarefa
+        document.querySelector(
+          "#modalBody"
+        ).innerHTML = `<p>${loggedInUser.tarefas[index].descricao}</p>`;
+      }
+
+      //-------------------------------------------
+      function showAlterarDiv(index) {
+        // Exibir a div de alteração
+        document.getElementById("alterarDiv").classList.remove("d-none");
+        document.getElementById("criarTarefa").classList.add("d-none");
+
+        // Preencher os campos do formulário com os dados da tarefa clicada
+        var tarefa = loggedInUser.tarefas[index];
+        document.getElementById("inputTask").value = tarefa.nomeTarefa;
+        document.getElementById("inputStartDate").value = tarefa.startDate;
+        document.getElementById("inputStartTime").value = tarefa.startTime;
+        document.getElementById("inputEndDate").value = tarefa.endDate;
+        document.getElementById("inputEndTime").value = tarefa.endTime;
+        document.getElementById("exampleFormControlTextarea1").value =
+          tarefa.descricao;
+
+        selectedTaskIndex = index;
+      }
+
+      function limparCampoFormulario() {
+        document.getElementById("inputTask").value = "";
+        document.getElementById("inputStartDate").value = "";
+        document.getElementById("inputStartTime").value = "";
+        document.getElementById("inputEndDate").value = "";
+        document.getElementById("inputEndTime").value = "";
+        document.getElementById("exampleFormControlTextarea1").value = "";
+      }
+
+      function ocultarBotoes() {
+        document.getElementById("alterarDiv").classList.add("d-none");
+        document.getElementById("criarTarefa").classList.remove("d-none");
+      }
+
+      function cancelarAlteracao() {
+        // Ocultar a div de alteração
+        ocultarBotoes();
+
+        // Limpar os campos do formulário
+        limparCampoFormulario();
+      }
+
+      function excluirTarefa() {
+        if (selectedTaskIndex != undefined) {
+          // Remover a tarefa do array de tarefas do usuário
+          loggedInUser.tarefas.splice(selectedTaskIndex, 1);
+
+          // Atualizar o usuário no localStorage
+          localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+          exibirTarefas();
+          limparCampoFormulario();
+          ocultarBotoes();
+        }
+      }
+
+      function alterarTarefa(index) {
+        // Recuperar os novos valores do formulário
+        var nomeTarefa = document.getElementById("inputTask").value;
+        var startDate = document.getElementById("inputStartDate").value;
+        var startTime = document.getElementById("inputStartTime").value;
+        var endDate = document.getElementById("inputEndDate").value;
+        var endTime = document.getElementById("inputEndTime").value;
+        var descricao = document.getElementById(
+          "exampleFormControlTextarea1"
+        ).value;
+
+        // Atualizar os valores da tarefa clicada
+        loggedInUser.tarefas[selectedTaskIndex].nomeTarefa = nomeTarefa;
+        loggedInUser.tarefas[selectedTaskIndex].startDate = startDate;
+        loggedInUser.tarefas[selectedTaskIndex].startTime = startTime;
+        loggedInUser.tarefas[selectedTaskIndex].endDate = endDate;
+        loggedInUser.tarefas[selectedTaskIndex].endTime = endTime;
+        loggedInUser.tarefas[selectedTaskIndex].descricao = descricao;
+
+        // Atualizar o usuário no localStorage
+        localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+        // Ocultar a div de alteração
+        document.getElementById("alterarDiv").classList.add("d-none");
+
+        // Limpar os campos do formulário
+        limparCampoFormulario();
+
+        // Recarregar a página (ou você pode atualizar a lista de tarefas sem recarregar)
+        location.reload();
+      }
+
+      function getCurrentDateTime() {
+        var now = new Date();
+        var currentDateTime =
+          now.getFullYear() +
+          "-" +
+          ("0" + (now.getMonth() + 1)).slice(-2) +
+          "-" +
+          ("0" + now.getDate()).slice(-2) +
+          "T" +
+          ("0" + now.getHours()).slice(-2) +
+          ":" +
+          ("0" + now.getMinutes()).slice(-2);
+        return currentDateTime;
+      }
+    </script>
+  </body>
+</html>

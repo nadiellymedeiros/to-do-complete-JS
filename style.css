@@ -1,0 +1,42 @@
+:root {
+  --primary: #6f42c1;
+}
+
+.bg-primary,
+.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.bg-primary,
+.btn-primary:hover {
+  background-color: #695dbf !important;
+}
+
+.form {
+  width: 50%;
+}
+
+img {
+  width: 90%;
+}
+
+@media (max-width: 900px) {
+  .startPage {
+    width: 100%;
+    height: 100%;
+    margin-top: 3rem;
+  }
+  .img-to-do {
+    display: none;
+  }
+
+  .form {
+    width: 100%;
+  }
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

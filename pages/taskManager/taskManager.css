@@ -1,0 +1,35 @@
+:root {
+  --primary: #6f42c1;
+}
+
+.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.btn-primary:hover {
+  background-color: #695dbf !important;
+}
+
+nav {
+  background: #6f42c1;
+  height: 3rem;
+}
+
+.containerTaskManager {
+  width: 40%;
+}
+
+.tableContent {
+  width: 80%;
+}
+
+@media (max-width: 900px) {
+  .containerTaskManager {
+    width: 90%;
+  }
+
+  .tableContent {
+    width: 95%;
+  }
+}

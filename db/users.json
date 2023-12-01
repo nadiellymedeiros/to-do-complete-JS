@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "nome": "John Doe",
+    "email": "john@example.com",
+    "senha": "123"
+  },
+
+  {
+    "id": 2,
+    "nome": "Jane Smith",
+    "email": "jane@example.com",
+    "senha": "123"
+  },
+
+  {
+    "id": 3,
+    "nome": "Alice Johnson",
+    "email": "alice@example.com",
+    "senha": "123"
+  },
+
+  {
+    "id": 4,
+    "name": "Nadielly Xavier",
+    "email": "nadielly@example.com",
+    "senha": "123"
+  }
+]
