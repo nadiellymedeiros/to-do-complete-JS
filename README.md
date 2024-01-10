@@ -1,10 +1,9 @@
 <h1 align="center"> Gerenciador de tarefas </h1>
 
-deploy: https://graceful-pudding-16476e.netlify.app
-
 <p align="center">Projeto de gerenciador de tarefas em aplicação wev utilizando JS, HTML, CSS e Bootstrap</p>
 
 
+deploy: https://graceful-pudding-16476e.netlify.app
 
 # Sumário
 
