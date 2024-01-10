@@ -10,7 +10,7 @@
 - [Descrição](#Descrição)
 - [Features](#Features)
 - [Tecnologias Utilizadas](#Tecnologias-Utilizadas)
-- [Autores](#Autores)
+- [Autora](#Autora)
 
 # Descrição
 
@@ -39,9 +39,9 @@ Esse projeto foi um desafio no programa Sharp Coders da Ímã Tech,para entrar n
 
 
 
-# Autores
+# Autora
 
 ❤️ Feito com carinho e dedicação por:❤️ 
 
 
-<div align="center"><img src="https://avatars.githubusercontent.com/u/105972020?v=4" width="100px;" alt=""/></div>
+<div ><img src="https://avatars.githubusercontent.com/u/105972020?v=4" width="100px;" alt=""/></div>
